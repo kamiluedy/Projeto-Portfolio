@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portfólio | Dev Profissional</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
+  <!-- EmailJS CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script>emailjs.init('q8it2-KPHeMrqFgRp');</script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Space Grotesk', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            neon: {
+              purple: '#a855f7',
+              violet: '#8b5cf6',
+              indigo: '#6366f1',
+              pink:   '#d946ef',
+            },
+          },
+          animation: {
+            'spin-slow':      'spin 8s linear infinite',
+            'pulse-glow':     'pulseGlow 2s ease-in-out infinite',
+            'float':          'float 6s ease-in-out infinite',
+            'gradient-shift': 'gradientShift 4s ease infinite',
+            'scanline':       'scanline 3s linear infinite',
+          },
+          keyframes: {
+            pulseGlow: {
+              '0%, 100%': { boxShadow: '0 0 10px #a855f7, 0 0 20px #a855f7' },
+              '50%':      { boxShadow: '0 0 20px #a855f7, 0 0 40px #a855f7, 0 0 60px #8b5cf6' },
+            },
+            float: {
+              '0%, 100%': { transform: 'translateY(0px)' },
+              '50%':      { transform: 'translateY(-12px)' },
+            },
+            gradientShift: {
+              '0%, 100%': { backgroundPosition: '0% 50%' },
+              '50%':      { backgroundPosition: '100% 50%' },
+            },
+            scanline: {
+              '0%':   { transform: 'translateY(-100%)' },
+              '100%': { transform: 'translateY(100vh)' },
+            },
+          },
+        },
+      },
+    };
+  </script>
+
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+  <!-- ── Cursor Glow ── -->
+  <div id="cursor-glow"></div>
+
+  <!-- ── Background Orbs ── -->
+  <div class="orb w-96 h-96 bg-purple-900 opacity-20" style="top:-100px;left:-100px;"></div>
+  <div class="orb w-80 h-80 bg-indigo-900 opacity-15" style="bottom:10%;right:-80px;"></div>
+  <div class="orb w-64 h-64 bg-violet-900 opacity-10" style="top:50%;left:40%;"></div>
+
+  <!-- ════════════════════════════════════════════
+       NAVBAR
+  ════════════════════════════════════════════ -->
+  <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 glass transition-all duration-300">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+
+        <!-- Logo -->
+        <a href="#home" class="flex items-center gap-2 group">
+          <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-600 to-indigo-600 flex items-center justify-center text-xs font-mono font-bold text-white shadow-lg group-hover:shadow-purple-500/40 transition-shadow duration-300">&lt;/&gt;</div>
+          <span class="font-mono font-bold text-sm text-gradient">dev.portfolio</span>
+        </a>
+
+        <!-- Desktop Nav -->
+        <div class="hidden md:flex items-center gap-8">
+          <a href="#about"      class="nav-link text-sm font-medium pb-1"        onclick="setActive(this)">Sobre Mim</a>
+          <a href="#techstack"  class="nav-link text-sm font-medium pb-1"        onclick="setActive(this)">Tech Stack</a>
+          <a href="#experience" class="nav-link text-sm font-medium pb-1"        onclick="setActive(this)">Experiência</a>
+          <a href="#certifications" class="nav-link text-sm font-medium pb-1"     onclick="setActive(this)">Formação</a>
+          <a href="#projects"   class="nav-link text-sm font-medium pb-1"        onclick="setActive(this)">Projetos</a>
+          <a href="#contact"   class="nav-link text-sm font-medium pb-1"        onclick="setActive(this)">Contato</a>
+        </div>
+
+        <!-- CTA + Hamburger -->
+        <div class="flex items-center gap-3">
+          <button id="hamburger" class="md:hidden text-slate-400 hover:text-white transition-colors" onclick="toggleMenu()">
+            <i data-lucide="menu" class="w-6 h-6" id="menu-icon"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="md:hidden px-4 pb-4">
+      <div class="flex flex-col gap-2 pt-2 border-t border-purple-900/30">
+        <a href="#about"      class="mobile-nav-link py-2 px-3 rounded-lg text-slate-300 hover:text-white hover:bg-purple-900/20 transition-all text-sm font-medium" onclick="closeMobileMenu()">Sobre Mim</a>
+        <a href="#techstack"  class="mobile-nav-link py-2 px-3 rounded-lg text-slate-300 hover:text-white hover:bg-purple-900/20 transition-all text-sm font-medium" onclick="closeMobileMenu()">Tech Stack</a>
+        <a href="#experience" class="mobile-nav-link py-2 px-3 rounded-lg text-slate-300 hover:text-white hover:bg-purple-900/20 transition-all text-sm font-medium" onclick="closeMobileMenu()">Experiência</a>
+        <a href="#certifications" class="mobile-nav-link py-2 px-3 rounded-lg text-slate-300 hover:text-white hover:bg-purple-900/20 transition-all text-sm font-medium" onclick="closeMobileMenu()">Formação</a>
+        <a href="#projects"   class="mobile-nav-link py-2 px-3 rounded-lg text-slate-300 hover:text-white hover:bg-purple-900/20 transition-all text-sm font-medium" onclick="closeMobileMenu()">Projetos</a>
+        <a href="#contact"   class="mobile-nav-link py-2 px-3 rounded-lg text-slate-300 hover:text-white hover:bg-purple-900/20 transition-all text-sm font-medium" onclick="closeMobileMenu()">Contato</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ════════════════════════════════════════════
+       HERO
+  ════════════════════════════════════════════ -->
+  <section id="home" class="relative min-h-screen flex items-center justify-center pt-16 px-4 overflow-hidden">
+
+    <!-- Grid lines background -->
+    <div class="absolute inset-0 opacity-5" style="background-image: linear-gradient(rgba(168,85,247,0.3) 1px,transparent 1px),linear-gradient(90deg,rgba(168,85,247,0.3) 1px,transparent 1px);background-size:60px 60px;"></div>
+
+    <div class="relative z-10 max-w-6xl mx-auto w-full">
+      <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
+
+        <!-- Photo -->
+        <div class="flex-shrink-0 animate-float order-1 lg:order-2">
+          <div class="relative w-64 h-64 sm:w-80 sm:h-80 lg:w-96 lg:h-96">
+            <!-- Rotating ring -->
+            <div class="absolute inset-0 rounded-full profile-ring p-[3px] animate-spin-slow">
+              <div class="w-full h-full rounded-full bg-neutral-950"></div>
+            </div>
+            <!-- Inner glow -->
+            <div class="absolute inset-2 rounded-full animate-pulse-glow"></div>
+            <!-- Photo placeholder -->
+            <div class="absolute inset-3 rounded-full overflow-hidden border border-purple-500/30">
+              <img src="assets/img/eu.jpeg" alt="Kamila Luedy" class="w-full h-full object-cover" style="object-position: center 30%">
+            </div>
+            <!-- Corner accents -->
+            <div class="absolute -top-1 -right-1 w-4 h-4 border-t-2 border-r-2 border-purple-400"></div>
+            <div class="absolute -bottom-1 -left-1 w-4 h-4 border-b-2 border-l-2 border-indigo-400"></div>
+          </div>
+        </div>
+
+        <!-- Text -->
+        <div class="flex-1 text-center lg:text-left order-2 lg:order-1">
+
+          <!-- Status badge -->
+          <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass neon-border mb-6 text-xs font-mono text-purple-300">
+            <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
+            Disponível para novas oportunidades
+          </div>
+
+          <!-- Name -->
+          <h1 class="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold mb-4 leading-tight">
+            <span class="text-white">Olá, eu sou</span><br/>
+            <span class="text-gradient">Kamila Luedy</span>
+          </h1>
+
+          <!-- Role — typewriter -->
+          <div class="flex items-center gap-3 justify-center lg:justify-start mb-4">
+            <div class="h-px w-8 bg-gradient-to-r from-transparent to-purple-500"></div>
+            <span class="font-mono text-purple-300 text-sm sm:text-base tracking-widest uppercase" id="typewriter"></span>
+            <div class="h-px w-8 bg-gradient-to-l from-transparent to-purple-500"></div>
+          </div>
+
+          <!-- Tagline -->
+          <p class="text-slate-400 text-base sm:text-lg mb-8 max-w-xl mx-auto lg:mx-0 leading-relaxed">
+            Transformo <span class="text-purple-300 font-medium">ideias complexas</span> em experiências digitais elegantes.
+            Apaixonado por código limpo, performance e design que <span class="text-indigo-300 font-medium">emociona</span>.
+          </p>
+
+          <!-- CTA Buttons -->
+          <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-8">
+            <a href="#projects" class="btn-primary rounded-xl px-6 py-3 inline-flex items-center justify-center gap-2">
+              <span class="flex items-center gap-2">
+                <i data-lucide="folder-open" class="w-4 h-4"></i>
+                Ver Projetos
+              </span>
+            </a>
+            <a href="assets/img/curriculo-kamila-luedy.pdf" download class="btn-outline rounded-xl px-6 py-3 inline-flex items-center justify-center gap-2">
+              <i data-lucide="download" class="w-4 h-4"></i>
+              Baixar Currículo
+            </a>
+          </div>
+
+          <!-- Social Icons -->
+          <div class="flex items-center gap-3 justify-center lg:justify-start">
+            <a href="https://www.linkedin.com/in/kamilaluedy" target="_blank" rel="noopener" class="social-icon" title="LinkedIn">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            </a>
+            <a href="https://github.com/kamiluedy" target="_blank" rel="noopener" class="social-icon" title="GitHub">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+            </a>
+            <a href="mailto:kamiluedy@gmail.com" class="social-icon" title="E-mail">
+              <i data-lucide="mail" class="w-4 h-4"></i>
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Scroll indicator -->
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-50 animate-bounce">
+      <span class="text-xs font-mono text-purple-400">scroll</span>
+      <i data-lucide="chevrons-down" class="w-4 h-4 text-purple-400"></i>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════
+       SOBRE MIM
+  ════════════════════════════════════════════ -->
+  <section id="about" class="py-24 px-4 relative">
+    <div class="max-w-6xl mx-auto">
+
+      <!-- Section header -->
+      <div class="text-center mb-16 reveal">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass neon-border mb-4 text-xs font-mono text-purple-300">
+          <i data-lucide="user-circle" class="w-3.5 h-3.5"></i>
+          Sobre Mim
+        </div>
+        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold">
+          <span class="text-white">Quem sou </span><span class="text-gradient">eu?</span>
+        </h2>
+      </div>
+
+      <div class="max-w-3xl mx-auto reveal">
+        <div class="glass-card rounded-2xl p-8 neon-border">
+          <div class="flex items-center gap-3 mb-6">
+            <div class="w-10 h-10 rounded-xl bg-purple-600/20 border border-purple-500/30 flex items-center justify-center">
+              <i data-lucide="database" class="w-5 h-5 text-purple-400"></i>
+            </div>
+            <div>
+              <h3 class="font-bold text-white text-sm">Kamila Luedy</h3>
+              <p class="text-xs text-purple-400 font-mono">Analista de Dados & BI</p>
+            </div>
+          </div>
+          <p class="text-slate-400 leading-relaxed mb-4">
+            Sou uma profissional apaixonada por transformar dados em decisões. Atuo na interseção entre <span class="text-purple-300 font-medium">Business Intelligence</span>, análise de dados e automação de processos, entregando soluções que geram impacto real nos negócios.
+          </p>
+          <p class="text-slate-400 leading-relaxed mb-4">
+            Minha trajetória passou por ambientes de alta complexidade — como gestão hospitalar e engenharia — onde desenvolvi dashboards estratégicos, automatizei processos com Python e construí pipelines de dados robustos.
+          </p>
+          <p class="text-slate-400 leading-relaxed">
+            Acredito que dados bem interpretados são o maior ativo de uma organização. Meu objetivo é sempre transformar volumes de informação em <span class="text-indigo-300 font-medium">clareza, eficiência e resultados mensuráveis</span>.
+          </p>
+
+          <!-- Stats -->
+          <div class="grid grid-cols-3 gap-3 mt-8 pt-6 border-t border-purple-900/30">
+            <div class="stat-pill">
+              <div class="text-2xl font-bold text-gradient">3+</div>
+              <div class="text-xs text-slate-400 mt-0.5 font-mono">Anos de exp.</div>
+            </div>
+            <div class="stat-pill">
+              <div class="text-2xl font-bold text-gradient">15+</div>
+              <div class="text-xs text-slate-400 mt-0.5 font-mono">Dashboards</div>
+            </div>
+            <div class="stat-pill">
+              <div class="text-2xl font-bold text-gradient">12+</div>
+              <div class="text-xs text-slate-400 mt-0.5 font-mono">Tecnologias</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════
+       TECH STACK
+  ════════════════════════════════════════════ -->
+  <section id="techstack" class="py-24 px-4 relative">
+    <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-purple-700/40 to-transparent"></div>
+
+    <div class="max-w-6xl mx-auto">
+
+      <!-- Header -->
+      <div class="text-center mb-14 reveal">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass neon-border mb-4 text-xs font-mono text-purple-300">
+          <i data-lucide="cpu" class="w-3.5 h-3.5"></i>
+          Habilidades Técnicas
+        </div>
+        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold">
+          <span class="text-white">Minha </span><span class="text-gradient">Tech Stack</span>
+        </h2>
+        <p class="text-slate-400 mt-4 max-w-xl mx-auto">Ferramentas e tecnologias que uso no dia a dia para entregar soluções de alto impacto.</p>
+      </div>
+
+      <!-- Grid de categorias — 3 cards -->
+      <div class="grid lg:grid-cols-3 gap-6">
+
+        <!-- ── BI & Análise de Dados ── -->
+        <div class="stack-card rounded-2xl p-6 reveal">
+          <div class="flex items-center gap-3 mb-5">
+            <div class="stack-cat-icon bg-blue-500/10 border border-blue-500/20"><i data-lucide="bar-chart-2" class="w-4 h-4 text-blue-400"></i></div>
+            <div>
+              <h3 class="font-semibold text-white text-sm">BI & Análise de Dados</h3>
+              <p class="text-xs text-slate-500 font-mono">Visualização, Dados & Bancos</p>
+            </div>
+          </div>
+          <div class="flex flex-col gap-3.5">
+            <div class="skill-row">
+              <div class="skill-row-label"><span class="skill-name">Power BI</span><span class="skill-pct">90%</span></div>
+              <div class="progress-bar-track"><div class="progress-bar-fill" data-width="90"></div></div>
+            </div>
+            <div class="skill-row">
+              <div class="skill-row-label"><span class="skill-name">Looker Studio</span><span class="skill-pct">85%</span></div>
+              <div class="progress-bar-track"><div class="progress-bar-fill" data-width="85"></div></div>
+            </div>
+            <div class="skill-row">
+              <div class="skill-row-label"><span class="skill-name">Grafana</span><span class="skill-pct">75%</span></div>
+              <div class="progress-bar-track"><div class="progress-bar-fill" data-width="75"></div></div>
+            </div>
+            <div class="skill-row">
+              <div class="skill-row-label"><span class="skill-name">DAX</span><span class="skill-pct">80%</span></div>
+              <div class="progress-bar-track"><div class="progress-bar-fill" data-width="80"></div></div>
+            </div>
+            <div class="skill-row">
+              <div class="skill-row-label"><span class="skill-name">SQL</span><span class="skill-pct">88%</span></div>
+              <div class="progress-bar-track"><div class="progress-bar-fill" data-width="88"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── Web Development ── -->
+        <div class="stack-card rounded-2xl p-6 reveal">
+          <div class="flex items-center gap-3 mb-5">
+            <div class="stack-cat-icon bg-blue-500/10 border border-blue-500/20"><i data-lucide="globe" class="w-4 h-4 text-blue-400"></i></div>
+            <div>
+              <h3 class="font-semibold text-white text-sm">Web Development</h3>
+              <p class="text-xs text-slate-500 font-mono">Desenvolvimento & Interfaces</p>
+            </div>
+          </div>
+          <div class="flex flex-col gap-3.5">
+            <!-- 5 itens: ScriptCase, HTML/CSS, Tailwind, JavaScript, Git -->
+            <div class="skill-row">
+              <div class="skill-row-label"><span class="skill-name">ScriptCase (PHP)</span><span class="skill-pct">80%</span></div>
+              <div class="progress-bar-track"><div class="progress-bar-fill" data-width="80"></div></div>
+            </div>
+            <div class="skill-row">
+              <div class="skill-row-label"><span class="skill-name">HTML / CSS</span><span class="skill-pct">88%</span></div>
+              <div class="progress-bar-track"><div class="progress-bar-fill" data-width="88"></div></div>
+            </div>
+            <div class="skill-row">
+              <div class="skill-row-label"><span class="skill-name">Tailwind CSS</span><span class="skill-pct">85%</span></div>
+              <div class="progress-bar-track"><div class="progress-bar-fill" data-width="85"></div></div>
+            </div>
+            <div class="skill-row">
+              <div class="skill-row-label"><span class="skill-name">JavaScript</span><span class="skill-pct">78%</span></div>
+              <div class="progress-bar-track"><div class="progress-bar-fill" data-width="78"></div></div>
+            </div>
+            <div class="skill-row">
+              <div class="skill-row-label"><span class="skill-name">Git / GitHub</span><span class="skill-pct">82%</span></div>
+              <div class="progress-bar-track"><div class="progress-bar-fill" data-width="82"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── Automação & RPA ── -->
+        <div class="stack-card rounded-2xl p-6 reveal">
+          <div class="flex items-center gap-3 mb-5">
+            <div class="stack-cat-icon bg-blue-500/10 border border-blue-500/20"><i data-lucide="bot" class="w-4 h-4 text-blue-400"></i></div>
+            <div>
+              <h3 class="font-semibold text-white text-sm">Automação & RPA</h3>
+              <p class="text-xs text-slate-500 font-mono">Python & Process Automation</p>
+            </div>
+          </div>
+          <div class="flex flex-col gap-3.5">
+            <!-- 4 itens -->
+            <div class="skill-row">
+              <div class="skill-row-label"><span class="skill-name">Python</span><span class="skill-pct">85%</span></div>
+              <div class="progress-bar-track"><div class="progress-bar-fill" data-width="85"></div></div>
+            </div>
+            <div class="skill-row">
+              <div class="skill-row-label"><span class="skill-name">Pandas</span><span class="skill-pct">83%</span></div>
+              <div class="progress-bar-track"><div class="progress-bar-fill" data-width="83"></div></div>
+            </div>
+            <div class="skill-row">
+              <div class="skill-row-label"><span class="skill-name">Selenium</span><span class="skill-pct">76%</span></div>
+              <div class="progress-bar-track"><div class="progress-bar-fill" data-width="76"></div></div>
+            </div>
+            <div class="skill-row">
+              <div class="skill-row-label"><span class="skill-name">PyAutoGUI</span><span class="skill-pct">72%</span></div>
+              <div class="progress-bar-track"><div class="progress-bar-fill" data-width="72"></div></div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /grid categorias -->
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════
+       EXPERIÊNCIA
+  ════════════════════════════════════════════ -->
+  <section id="experience" class="py-24 px-4 relative">
+    <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-purple-700/40 to-transparent"></div>
+
+    <div class="max-w-4xl mx-auto">
+
+      <!-- Header -->
+      <div class="text-center mb-16 reveal">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass neon-border mb-4 text-xs font-mono text-purple-300">
+          <i data-lucide="briefcase" class="w-3.5 h-3.5"></i>
+          Trajetória Profissional
+        </div>
+        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold">
+          <span class="text-white">Minha </span><span class="text-gradient">Experiência</span>
+        </h2>
+        <p class="text-slate-400 mt-4 max-w-xl mx-auto">Uma jornada construída com dados, automação e entrega de valor real.</p>
+      </div>
+
+      <!-- Timeline wrapper -->
+      <div class="relative">
+
+        <!-- Linha central — desktop -->
+        <div class="hidden md:block absolute left-1/2 top-0 bottom-0 w-px -translate-x-1/2"
+             style="background: linear-gradient(180deg, transparent 0%, #7c3aed 8%, #7c3aed 92%, transparent 100%);"></div>
+
+        <!-- Linha lateral — mobile -->
+        <div class="md:hidden absolute left-4 top-0 bottom-0 w-px"
+             style="background: linear-gradient(180deg, transparent 0%, #7c3aed 8%, #7c3aed 92%, transparent 100%);"></div>
+
+        <div class="flex flex-col gap-10">
+
+          <!-- ── Card 1 — lado esquerdo ── -->
+          <div class="tl-entry md:grid md:grid-cols-2 md:gap-10 items-start pl-10 md:pl-0">
+
+            <!-- Card -->
+            <div class="tl-card relative rounded-xl p-5" style="opacity:0;transform:translateY(32px);">
+              <!-- dot desktop (borda direita do card) -->
+              <div class="hidden md:block absolute top-6 -right-[calc(1.25rem+1px)] w-3 h-3 rounded-full z-10"
+                   style="background:linear-gradient(135deg,#a855f7,#6366f1);box-shadow:0 0 0 3px rgba(168,85,247,.2),0 0 10px rgba(168,85,247,.5);"></div>
+              <!-- dot mobile -->
+              <div class="md:hidden absolute -left-7 top-5 w-3 h-3 rounded-full"
+                   style="background:linear-gradient(135deg,#a855f7,#6366f1);box-shadow:0 0 0 3px rgba(168,85,247,.2),0 0 10px rgba(168,85,247,.5);"></div>
+
+              <div class="flex items-center gap-2 mb-2 text-xs font-mono" style="color:#22d3ee;">
+                <i data-lucide="briefcase" class="w-3.5 h-3.5"></i>
+                <span>2024 — Presente</span>
+              </div>
+              <h3 class="font-bold text-white text-base mb-0.5">Dasco Engenharia</h3>
+              <p class="text-slate-400 text-sm mb-3">Analista de Dados Júnior</p>
+              <p class="text-slate-500 text-sm leading-relaxed mb-4">
+                Atuação estratégica em BI e análise de dados complexos. Dashboards interativos com KPIs gerenciais, administração de bancos PostgreSQL, desenvolvimento web com ScriptCase/PHP e suporte a infraestrutura de TI.
+              </p>
+              <div class="flex flex-wrap gap-1.5">
+                <span class="tl-tag">Power BI</span>
+                <span class="tl-tag">PostgreSQL</span>
+                <span class="tl-tag">ScriptCase</span>
+                <span class="tl-tag">DAX</span>
+              </div>
+              <div class="absolute top-4 right-4">
+                <span class="inline-flex items-center gap-1.5 text-xs font-mono px-2 py-0.5 rounded-full bg-green-500/10 border border-green-500/25 text-green-400">
+                  <span class="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse"></span>Atual
+                </span>
+              </div>
+            </div>
+
+            <!-- Placeholder lado direito -->
+            <div class="hidden md:block"></div>
+          </div>
+
+          <!-- ── Card 2 — lado direito ── -->
+          <div class="tl-entry md:grid md:grid-cols-2 md:gap-10 items-start pl-10 md:pl-0">
+
+            <!-- Placeholder lado esquerdo -->
+            <div class="hidden md:block"></div>
+
+            <!-- Card -->
+            <div class="tl-card relative rounded-xl p-5" style="opacity:0;transform:translateY(32px);">
+              <!-- dot desktop (borda esquerda do card) -->
+              <div class="hidden md:block absolute top-6 -left-[calc(1.25rem+1px)] w-3 h-3 rounded-full z-10"
+                   style="background:linear-gradient(135deg,#a855f7,#6366f1);box-shadow:0 0 0 3px rgba(168,85,247,.2),0 0 10px rgba(168,85,247,.5);"></div>
+              <!-- dot mobile -->
+              <div class="md:hidden absolute -left-7 top-5 w-3 h-3 rounded-full"
+                   style="background:linear-gradient(135deg,#a855f7,#6366f1);box-shadow:0 0 0 3px rgba(168,85,247,.2),0 0 10px rgba(168,85,247,.5);"></div>
+
+              <div class="flex items-center gap-2 mb-2 text-xs font-mono" style="color:#22d3ee;">
+                <i data-lucide="briefcase" class="w-3.5 h-3.5"></i>
+                <span>2023 — 2024</span>
+              </div>
+              <h3 class="font-bold text-white text-base mb-0.5">Hospital Municipal M'Boi Mirim</h3>
+              <p class="text-slate-400 text-sm mb-3">Assistente de Dados & Analytics</p>
+              <p class="text-slate-500 text-sm leading-relaxed mb-4">
+                Automação de processos com Python (Pandas, Selenium, PyAutoGUI). Dashboards em Power BI e Looker Studio para gestão hospitalar. Manipulação avançada de dados em Excel com automações e pipelines ETL.
+              </p>
+              <div class="flex flex-wrap gap-1.5">
+                <span class="tl-tag">Python</span>
+                <span class="tl-tag">Pandas</span>
+                <span class="tl-tag">Power BI</span>
+                <span class="tl-tag">Selenium</span>
+              </div>
+              <div class="absolute top-4 right-4">
+                <span class="text-xs font-mono px-2 py-0.5 rounded-full bg-slate-500/10 border border-slate-500/25 text-slate-400">8 meses</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- ── Card 3 — lado esquerdo ── -->
+          <div class="tl-entry md:grid md:grid-cols-2 md:gap-10 items-start pl-10 md:pl-0">
+
+            <!-- Card -->
+            <div class="tl-card relative rounded-xl p-5" style="opacity:0;transform:translateY(32px);">
+              <!-- dot desktop -->
+              <div class="hidden md:block absolute top-6 -right-[calc(1.25rem+1px)] w-3 h-3 rounded-full z-10"
+                   style="background:linear-gradient(135deg,#a855f7,#6366f1);box-shadow:0 0 0 3px rgba(168,85,247,.2),0 0 10px rgba(168,85,247,.5);"></div>
+              <!-- dot mobile -->
+              <div class="md:hidden absolute -left-7 top-5 w-3 h-3 rounded-full"
+                   style="background:linear-gradient(135deg,#a855f7,#6366f1);box-shadow:0 0 0 3px rgba(168,85,247,.2),0 0 10px rgba(168,85,247,.5);"></div>
+
+              <div class="flex items-center gap-2 mb-2 text-xs font-mono" style="color:#22d3ee;">
+                <i data-lucide="briefcase" class="w-3.5 h-3.5"></i>
+                <span>2022 — 2023</span>
+              </div>
+              <h3 class="font-bold text-white text-base mb-0.5">Hospital Municipal M'Boi Mirim</h3>
+              <p class="text-slate-400 text-sm mb-3">Estagiária de Dados & Analytics</p>
+              <p class="text-slate-500 text-sm leading-relaxed mb-4">
+                Business Intelligence com Power BI e Looker Studio para relatórios clínicos. Extração e tratamento de grandes volumes de dados (ETL) com Power Query. Início da jornada em RPA com Python.
+              </p>
+              <div class="flex flex-wrap gap-1.5">
+                <span class="tl-tag">Power BI</span>
+                <span class="tl-tag">Looker Studio</span>
+                <span class="tl-tag">Power Query</span>
+                <span class="tl-tag">Python</span>
+              </div>
+              <div class="absolute top-4 right-4">
+                <span class="text-xs font-mono px-2 py-0.5 rounded-full bg-slate-500/10 border border-slate-500/25 text-slate-400">1 ano</span>
+              </div>
+            </div>
+
+            <!-- Placeholder -->
+            <div class="hidden md:block"></div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════
+       CERTIFICAÇÕES
+  ════════════════════════════════════════════ -->
+  <section id="certifications" class="py-24 px-4 relative">
+    <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-purple-700/40 to-transparent"></div>
+
+    <div class="max-w-6xl mx-auto">
+
+      <!-- Header -->
+      <div class="text-center mb-14 reveal">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass neon-border mb-4 text-xs font-mono text-purple-300">
+          <i data-lucide="award" class="w-3.5 h-3.5"></i>
+          Formação & Certificações
+        </div>
+        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold">
+          <span class="text-white">Minha </span><span class="text-gradient">Formação</span>
+        </h2>
+        <p class="text-slate-400 mt-4 max-w-xl mx-auto">Educação formal e aprendizado contínuo como pilares da evolução profissional.</p>
+      </div>
+
+      <!-- Grid 3 cards -->
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+        <!-- Card 1 — Graduação -->
+        <div class="cert-card glass-card rounded-2xl p-7 reveal flex flex-col gap-5">
+          <div class="cert-icon w-12 h-12 rounded-xl flex items-center justify-center"
+               style="background:rgba(168,85,247,0.12);border:1px solid rgba(168,85,247,0.3);">
+            <i data-lucide="graduation-cap" class="w-6 h-6 text-purple-400"></i>
+          </div>
+          <div>
+            <span class="cert-type-badge">Graduação</span>
+            <h3 class="font-bold text-white text-base mt-2 mb-1 leading-snug">Análise e Desenvolvimento de Sistemas</h3>
+            <p class="text-slate-500 text-xs font-mono">FAM — Centro Universitário</p>
+          </div>
+          <div class="mt-auto pt-4 border-t border-purple-900/30 flex items-center gap-2">
+            <i data-lucide="map-pin" class="w-3.5 h-3.5 text-purple-600"></i>
+            <span class="text-xs text-slate-600 font-mono">Sistemas & Desenvolvimento</span>
+          </div>
+        </div>
+
+        <!-- Card 2 — MBA -->
+        <div class="cert-card glass-card rounded-2xl p-7 reveal flex flex-col gap-5">
+          <div class="cert-icon w-12 h-12 rounded-xl flex items-center justify-center"
+               style="background:rgba(99,102,241,0.12);border:1px solid rgba(99,102,241,0.3);">
+            <i data-lucide="database" class="w-6 h-6 text-indigo-400"></i>
+          </div>
+          <div>
+            <span class="cert-type-badge" style="background:rgba(99,102,241,0.12);border-color:rgba(99,102,241,0.35);color:#a5b4fc;">Pós-Graduação (MBA)</span>
+            <h3 class="font-bold text-white text-base mt-2 mb-1 leading-snug">Ciência de Dados e Big Data Analytics</h3>
+            <p class="text-slate-500 text-xs font-mono">FMU — Centro Universitário</p>
+          </div>
+          <div class="mt-auto pt-4 border-t border-purple-900/30 flex items-center gap-2">
+            <i data-lucide="map-pin" class="w-3.5 h-3.5 text-indigo-600"></i>
+            <span class="text-xs text-slate-600 font-mono">Data Science & Analytics</span>
+          </div>
+        </div>
+
+        <!-- Card 3 — Educação Continuada -->
+        <div class="cert-card glass-card rounded-2xl p-7 reveal flex flex-col gap-5">
+          <div class="cert-icon w-12 h-12 rounded-xl flex items-center justify-center"
+               style="background:rgba(217,70,239,0.12);border:1px solid rgba(217,70,239,0.3);">
+            <i data-lucide="medal" class="w-6 h-6 text-fuchsia-400"></i>
+          </div>
+          <div>
+            <span class="cert-type-badge" style="background:rgba(217,70,239,0.12);border-color:rgba(217,70,239,0.35);color:#f0abfc;">Educação Continuada</span>
+            <h3 class="font-bold text-white text-base mt-2 mb-1 leading-snug">Especialização em Python e Data Science</h3>
+            <p class="text-slate-500 text-xs font-mono">Alura (+20 cursos concluídos)</p>
+          </div>
+          <div class="mt-auto pt-4 border-t border-purple-900/30 flex items-center gap-2">
+            <i data-lucide="trending-up" class="w-3.5 h-3.5 text-fuchsia-600"></i>
+            <span class="text-xs text-slate-600 font-mono">Aprendizado Contínuo</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════
+       PROJETOS
+  ════════════════════════════════════════════ -->
+  <section id="projects" class="py-24 px-4 relative">
+    <!-- Divider -->
+    <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-purple-700/40 to-transparent"></div>
+
+    <div class="max-w-6xl mx-auto">
+
+      <!-- Section header -->
+      <div class="text-center mb-10 reveal">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass neon-border mb-4 text-xs font-mono text-purple-300">
+          <i data-lucide="folder-git-2" class="w-3.5 h-3.5"></i>
+          Projetos
+        </div>
+        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold">
+          <span class="text-white">O que eu </span><span class="text-gradient">construí</span>
+        </h2>
+        <p class="text-slate-400 mt-4 max-w-xl mx-auto">Uma seleção dos meus trabalhos mais recentes e relevantes.</p>
+      </div>
+
+      <!-- Filter Buttons -->
+      <div class="flex flex-wrap justify-center gap-3 mb-10 reveal">
+        <button class="filter-btn active rounded-xl px-5 py-2 text-sm font-medium" onclick="filterProjects(this, 'all')">
+          <i data-lucide="layout-grid" class="w-3.5 h-3.5 inline mr-1.5"></i>Todos
+        </button>
+        <button class="filter-btn rounded-xl px-5 py-2 text-sm font-medium" onclick="filterProjects(this, 'dashboard')">
+          <i data-lucide="bar-chart-3" class="w-3.5 h-3.5 inline mr-1.5"></i>Dashboards
+        </button>
+        <button class="filter-btn rounded-xl px-5 py-2 text-sm font-medium" onclick="filterProjects(this, 'website')">
+          <i data-lucide="globe" class="w-3.5 h-3.5 inline mr-1.5"></i>Websites
+        </button>
+        <button class="filter-btn rounded-xl px-5 py-2 text-sm font-medium" onclick="filterProjects(this, 'app')">
+          <i data-lucide="smartphone" class="w-3.5 h-3.5 inline mr-1.5"></i>Aplicativos
+        </button>
+      </div>
+
+      <!-- Projects Grid -->
+      <div id="projects-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+        <!-- Project Card 1 — Dashboard -->
+        <article class="project-card glass-card rounded-2xl overflow-hidden" data-category="dashboard">
+          <div class="overflow-hidden h-44 bg-gradient-to-br from-purple-900/40 to-indigo-900/40 relative">
+            <!-- Replace with: <img src="img/project1.jpg" alt="..." class="project-img w-full h-full object-cover"> -->
+            <div class="project-img w-full h-full flex items-center justify-center">
+              <i data-lucide="bar-chart-3" class="w-12 h-12 text-purple-500/50"></i>
+            </div>
+            <div class="absolute top-3 left-3">
+              <span class="text-xs font-mono bg-purple-600/30 border border-purple-500/30 text-purple-300 px-2 py-1 rounded">Dashboard</span>
+            </div>
+          </div>
+          <div class="p-5">
+            <h3 class="font-bold text-white text-base mb-2">Analytics Dashboard</h3>
+            <p class="text-slate-400 text-sm leading-relaxed mb-4">Dashboard completo com gráficos interativos, KPIs em tempo real e sistema de relatórios personalizáveis.</p>
+            <div class="flex flex-wrap gap-2 mb-5">
+              <span class="tech-tag">React</span>
+              <span class="tech-tag">TypeScript</span>
+              <span class="tech-tag">Recharts</span>
+              <span class="tech-tag">Node.js</span>
+            </div>
+            <div class="flex gap-2">
+              <a href="#" target="_blank" class="flex-1 btn-outline rounded-lg py-2 text-xs font-medium text-center flex items-center justify-center gap-1.5">
+                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+                Código
+              </a>
+              <a href="#" target="_blank" class="flex-1 btn-primary rounded-lg py-2 text-xs font-medium text-center flex items-center justify-center gap-1.5">
+                <span class="flex items-center gap-1.5"><i data-lucide="external-link" class="w-3 h-3"></i> Live Demo</span>
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Project Card 2 — Website -->
+        <article class="project-card glass-card rounded-2xl overflow-hidden" data-category="website">
+          <div class="overflow-hidden h-44 bg-gradient-to-br from-indigo-900/40 to-violet-900/40 relative">
+            <div class="project-img w-full h-full flex items-center justify-center">
+              <i data-lucide="globe" class="w-12 h-12 text-indigo-500/50"></i>
+            </div>
+            <div class="absolute top-3 left-3">
+              <span class="text-xs font-mono bg-indigo-600/30 border border-indigo-500/30 text-indigo-300 px-2 py-1 rounded">Website</span>
+            </div>
+          </div>
+          <div class="p-5">
+            <h3 class="font-bold text-white text-base mb-2">Website de Chamados KML</h3>
+            <p class="text-slate-400 text-sm leading-relaxed mb-4">Sistema de helpdesk para abertura e acompanhamento de chamados internos das equipes de RH, T.I. e outros departamentos.</p>
+            <div class="flex flex-wrap gap-2 mb-5">
+              <span class="tech-tag">HTML</span>
+              <span class="tech-tag">CSS</span>
+              <span class="tech-tag">JavaScript</span>
+            </div>
+            <div class="flex gap-2">
+              <a href="#" target="_blank" class="flex-1 btn-outline rounded-lg py-2 text-xs font-medium text-center flex items-center justify-center gap-1.5">
+                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+                Código
+              </a>
+              <a href="https://kamiluedy.github.io/Projeto-Chamados-Helpdesk/dashboard/" target="_blank" class="flex-1 btn-primary rounded-lg py-2 text-xs font-medium text-center flex items-center justify-center gap-1.5">
+                <span class="flex items-center gap-1.5"><i data-lucide="external-link" class="w-3 h-3"></i> Live Demo</span>
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Project Card 3 — App -->
+        <article class="project-card glass-card rounded-2xl overflow-hidden" data-category="app">
+          <div class="overflow-hidden h-44 bg-gradient-to-br from-violet-900/40 to-fuchsia-900/40 relative">
+            <div class="project-img w-full h-full flex items-center justify-center">
+              <i data-lucide="smartphone" class="w-12 h-12 text-violet-500/50"></i>
+            </div>
+            <div class="absolute top-3 left-3">
+              <span class="text-xs font-mono bg-violet-600/30 border border-violet-500/30 text-violet-300 px-2 py-1 rounded">Aplicativo</span>
+            </div>
+          </div>
+          <div class="p-5">
+            <h3 class="font-bold text-white text-base mb-2">App de Gestão de Tarefas</h3>
+            <p class="text-slate-400 text-sm leading-relaxed mb-4">Aplicativo mobile-first com autenticação, sincronização em tempo real, notificações push e modo offline.</p>
+            <div class="flex flex-wrap gap-2 mb-5">
+              <span class="tech-tag">React Native</span>
+              <span class="tech-tag">Firebase</span>
+              <span class="tech-tag">Redux</span>
+            </div>
+            <div class="flex gap-2">
+              <a href="#" target="_blank" class="flex-1 btn-outline rounded-lg py-2 text-xs font-medium text-center flex items-center justify-center gap-1.5">
+                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+                Código
+              </a>
+              <a href="#" target="_blank" class="flex-1 btn-primary rounded-lg py-2 text-xs font-medium text-center flex items-center justify-center gap-1.5">
+                <span class="flex items-center gap-1.5"><i data-lucide="external-link" class="w-3 h-3"></i> Live Demo</span>
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Project Card 4 — Dashboard -->
+        <article class="project-card glass-card rounded-2xl overflow-hidden" data-category="dashboard">
+          <div class="overflow-hidden h-44 bg-gradient-to-br from-purple-900/40 to-blue-900/40 relative">
+            <div class="project-img w-full h-full flex items-center justify-center">
+              <i data-lucide="activity" class="w-12 h-12 text-purple-500/50"></i>
+            </div>
+            <div class="absolute top-3 left-3">
+              <span class="text-xs font-mono bg-purple-600/30 border border-purple-500/30 text-purple-300 px-2 py-1 rounded">Dashboard</span>
+            </div>
+          </div>
+          <div class="p-5">
+            <h3 class="font-bold text-white text-base mb-2">BI Financeiro</h3>
+            <p class="text-slate-400 text-sm leading-relaxed mb-4">Painel de business intelligence com análise preditiva, integração com múltiplas fontes de dados e exportação PDF.</p>
+            <div class="flex flex-wrap gap-2 mb-5">
+              <span class="tech-tag">Vue.js</span>
+              <span class="tech-tag">Python</span>
+              <span class="tech-tag">FastAPI</span>
+              <span class="tech-tag">PostgreSQL</span>
+            </div>
+            <div class="flex gap-2">
+              <a href="#" target="_blank" class="flex-1 btn-outline rounded-lg py-2 text-xs font-medium text-center flex items-center justify-center gap-1.5">
+                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+                Código
+              </a>
+              <a href="#" target="_blank" class="flex-1 btn-primary rounded-lg py-2 text-xs font-medium text-center flex items-center justify-center gap-1.5">
+                <span class="flex items-center gap-1.5"><i data-lucide="external-link" class="w-3 h-3"></i> Live Demo</span>
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Project Card 5 — Website -->
+        <article class="project-card glass-card rounded-2xl overflow-hidden" data-category="website">
+          <div class="overflow-hidden h-44 bg-gradient-to-br from-indigo-900/40 to-emerald-900/40 relative">
+            <div class="project-img w-full h-full flex items-center justify-center">
+              <i data-lucide="shopping-bag" class="w-12 h-12 text-indigo-500/50"></i>
+            </div>
+            <div class="absolute top-3 left-3">
+              <span class="text-xs font-mono bg-indigo-600/30 border border-indigo-500/30 text-indigo-300 px-2 py-1 rounded">Website</span>
+            </div>
+          </div>
+          <div class="p-5">
+            <h3 class="font-bold text-white text-base mb-2">E-commerce Premium</h3>
+            <p class="text-slate-400 text-sm leading-relaxed mb-4">Loja virtual completa com checkout otimizado, painel admin, integração de pagamentos e gestão de estoque.</p>
+            <div class="flex flex-wrap gap-2 mb-5">
+              <span class="tech-tag">Next.js</span>
+              <span class="tech-tag">Stripe</span>
+              <span class="tech-tag">Prisma</span>
+            </div>
+            <div class="flex gap-2">
+              <a href="#" target="_blank" class="flex-1 btn-outline rounded-lg py-2 text-xs font-medium text-center flex items-center justify-center gap-1.5">
+                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+                Código
+              </a>
+              <a href="#" target="_blank" class="flex-1 btn-primary rounded-lg py-2 text-xs font-medium text-center flex items-center justify-center gap-1.5">
+                <span class="flex items-center gap-1.5"><i data-lucide="external-link" class="w-3 h-3"></i> Live Demo</span>
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Project Card 6 — App -->
+        <article class="project-card glass-card rounded-2xl overflow-hidden" data-category="app">
+          <div class="overflow-hidden h-44 bg-gradient-to-br from-rose-900/40 to-purple-900/40 relative">
+            <div class="project-img w-full h-full flex items-center justify-center">
+              <i data-lucide="message-square" class="w-12 h-12 text-rose-500/50"></i>
+            </div>
+            <div class="absolute top-3 left-3">
+              <span class="text-xs font-mono bg-violet-600/30 border border-violet-500/30 text-violet-300 px-2 py-1 rounded">Aplicativo</span>
+            </div>
+          </div>
+          <div class="p-5">
+            <h3 class="font-bold text-white text-base mb-2">Chat em Tempo Real</h3>
+            <p class="text-slate-400 text-sm leading-relaxed mb-4">Aplicação de chat com salas, mensagens criptografadas, compartilhamento de arquivos e integração com IA.</p>
+            <div class="flex flex-wrap gap-2 mb-5">
+              <span class="tech-tag">Socket.io</span>
+              <span class="tech-tag">React</span>
+              <span class="tech-tag">MongoDB</span>
+            </div>
+            <div class="flex gap-2">
+              <a href="#" target="_blank" class="flex-1 btn-outline rounded-lg py-2 text-xs font-medium text-center flex items-center justify-center gap-1.5">
+                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+                Código
+              </a>
+              <a href="#" target="_blank" class="flex-1 btn-primary rounded-lg py-2 text-xs font-medium text-center flex items-center justify-center gap-1.5">
+                <span class="flex items-center gap-1.5"><i data-lucide="external-link" class="w-3 h-3"></i> Live Demo</span>
+              </a>
+            </div>
+          </div>
+        </article>
+
+      </div><!-- /projects-grid -->
+
+      <!-- Empty state -->
+      <div id="no-projects" class="hidden text-center py-16">
+        <i data-lucide="search-x" class="w-12 h-12 text-purple-600/40 mx-auto mb-4"></i>
+        <p class="text-slate-500">Nenhum projeto nesta categoria ainda.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════
+       CONTACT
+  ════════════════════════════════════════════ -->
+  <section id="contact" class="py-24 px-4 relative overflow-hidden">
+
+    <!-- decorative blobs -->
+    <div class="absolute inset-0 pointer-events-none">
+      <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-purple-900/10 blur-3xl"></div>
+      <div class="absolute bottom-0 right-0 w-64 h-64 rounded-full bg-indigo-900/15 blur-3xl"></div>
+    </div>
+
+    <div class="max-w-4xl mx-auto relative z-10">
+
+      <!-- Header -->
+      <div class="text-center mb-14 reveal">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-purple-500/30 bg-purple-500/5 text-purple-400 text-xs font-mono mb-6">
+          <i data-lucide="send" class="w-3.5 h-3.5"></i> Contato
+        </div>
+        <h2 class="text-4xl sm:text-5xl font-bold text-white mb-4">Vamos <span class="text-gradient">conversar?</span></h2>
+        <p class="text-slate-400 max-w-xl mx-auto text-sm leading-relaxed">
+          Aberta a novas oportunidades, projetos freelance e colaborações. Me manda uma mensagem — responderei em breve!
+        </p>
+      </div>
+
+      <!-- Main card -->
+      <div class="glass-card rounded-3xl p-8 sm:p-10 reveal max-w-2xl mx-auto">
+        <div class="flex flex-col gap-5">
+          <div class="contact-field-wrap">
+            <label class="contact-label">Nome</label>
+            <input type="text" placeholder="Seu nome" class="contact-input" />
+          </div>
+          <div class="contact-field-wrap">
+            <label class="contact-label">E-mail</label>
+            <input type="email" placeholder="seu@email.com" class="contact-input" />
+          </div>
+          <div class="contact-field-wrap">
+            <label class="contact-label">Mensagem</label>
+            <textarea rows="5" placeholder="Olá Kamila, gostaria de..." class="contact-input resize-none"></textarea>
+          </div>
+          <button onclick="sendContactEmail(this)" class="btn-primary rounded-xl px-6 py-3 inline-flex items-center justify-center gap-2 w-full mt-1">
+            <span class="flex items-center gap-2">
+              <i data-lucide="send" class="w-4 h-4"></i>
+              Enviar Mensagem
+            </span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Botão voltar ao topo -->
+  <button id="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Voltar ao topo">
+    <i data-lucide="arrow-up" class="w-5 h-5"></i>
+  </button>
+
+  <!-- ════════════════════════════════════════════
+       FOOTER
+  ════════════════════════════════════════════ -->
+  <footer class="py-10 px-4 border-t border-purple-900/20">
+    <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-2">
+        <div class="w-7 h-7 rounded-lg bg-gradient-to-br from-purple-600 to-indigo-600 flex items-center justify-center text-xs font-mono font-bold text-white">&lt;/&gt;</div>
+        <span class="font-mono text-sm text-slate-500">&copy; 2026 <span class="text-purple-400">Kamila Luedy</span> todos os direitos reservados.</span>
+      </div>
+      <p class="font-mono text-xs text-slate-600">
+        <span class="text-purple-600">// </span>Construído com <span class="text-purple-400">paixão</span>, HTML, Tailwind &amp; JS puro.
+      </p>
+    </div>
+  </footer>
+
+  <!-- ════════════════════════════════════════════
+       JAVASCRIPT
+  ════════════════════════════════════════════ -->
+  <script src="js/main.js"></script>
+</body>
+</html>
